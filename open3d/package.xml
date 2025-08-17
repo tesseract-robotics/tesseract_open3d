@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>libopen3d-dev</name>
+  <version>0.19.0</version>
+  <description>Downloads and installs Open3d </description>
+  <maintainer email="levi.armstrong@gmail.com">Levi Armstrong</maintainer>
+  <license>Apache 2.0</license>
+  <author>Levi Armstrong</author>
+
+  <!-- Following recommendations of REP 136 -->
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
