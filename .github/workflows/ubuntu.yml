@@ -3,7 +3,7 @@ name: Ubuntu
 on:
   push:
     branches:
-      - master
+      - main
       - 'dev**'
   pull_request:
     paths:
@@ -47,6 +47,7 @@ jobs:
         uses: tesseract-robotics/colcon-action@v11
         with:
           ccache-prefix: ${{ matrix.distro }}
+          vcs-file: dependencies.repos
           upstream-args: --cmake-args -DCMAKE_BUILD_TYPE=Release
           target-path: target_ws/src
           target-args: --cmake-args -DCMAKE_BUILD_TYPE=Debug -DTESSERACT_ENABLE_TESTING=ON
