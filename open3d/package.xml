@@ -10,6 +10,12 @@
   <!-- Following recommendations of REP 136 -->
   <buildtool_depend>cmake</buildtool_depend>
 
+  <build_depend>libglfw3-dev</build_depend>
+  <build_depend>opengl</build_depend>
+  <exec_depend>opengl</exec_depend>
+
+  <depend>libc++-dev</depend>
+
   <export>
     <build_type>cmake</build_type>
   </export>

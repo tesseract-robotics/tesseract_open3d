@@ -26,7 +26,7 @@ ExternalProject_Add(
   SOURCE_DIR "${OPEN3D_STAGE}"
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
-  INSTALL_COMMAND "" DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+  INSTALL_COMMAND ""
   TLS_VERIFY ON)
 
 # ---- Install headers, libs, and the Open3D CMake package -------------------
