@@ -1,0 +1,137 @@
+---
+Checks: >
+    -*,
+    clang-diagnostic-*,
+    -clang-diagnostic-unknown-warning-option,
+    -clang-diagnostic-enum-constexpr-conversion,
+    clang-analyzer-*,
+    -clang-analyzer-optin.core.EnumCastOutOfRange,
+    bugprone-*,
+    -bugprone-easily-swappable-parameters,
+    -bugprone-exception-escape,
+    cppcoreguidelines-*,
+    -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+    -cppcoreguidelines-non-private-member-variables-in-classes,
+    -cppcoreguidelines-avoid-magic-numbers,
+    -cppcoreguidelines-pro-type-union-access,
+    misc-*,
+    -misc-non-private-member-variables-in-classes,
+    -misc-no-recursion,
+    -misc-use-internal-linkage,
+    -misc-use-anonymous-namespace,
+    modernize-*,
+    -modernize-use-trailing-return-type,
+    performance-*,
+    readability-*,
+    -readability-function-cognitive-complexity,
+    -readability-magic-numbers
+WarningsAsErrors: >
+    -*,
+    clang-diagnostic-*,
+    -clang-diagnostic-unknown-warning-option,
+    -clang-diagnostic-enum-constexpr-conversion,
+    clang-analyzer-*,
+    -clang-analyzer-optin.core.EnumCastOutOfRange,
+    bugprone-*,
+    -bugprone-easily-swappable-parameters,
+    -bugprone-exception-escape,
+    cppcoreguidelines-*,
+    -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+    -cppcoreguidelines-non-private-member-variables-in-classes,
+    -cppcoreguidelines-avoid-magic-numbers,
+    -cppcoreguidelines-pro-type-union-access,
+    misc-*,
+    -misc-non-private-member-variables-in-classes,
+    -misc-no-recursion,
+    -misc-use-internal-linkage,
+    -misc-use-anonymous-namespace,
+    modernize-*,
+    -modernize-use-trailing-return-type,
+    performance-*,
+    readability-*,
+    -readability-function-cognitive-complexity,
+    -readability-magic-numbers
+HeaderFilterRegex: '^(?!.*ui_).*'
+FormatStyle:     none
+CheckOptions:
+  - key:             modernize-use-override.AllowOverrideAndFinal
+    value:           '1'
+  - key:             cppcoreguidelines-explicit-virtual-functions.AllowOverrideAndFinal
+    value:           '1'
+  - key:             cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value:           '1'
+  - key:             cppcoreguidelines-pro-type-member-init.IgnoreArrays
+    value:           '1'
+  - key:             cppcoreguidelines-pro-type-member-init.UseAssignment
+    value:           false
+  - key:             readability-identifier-length.MinimumVariableNameLength
+    value:           '1'
+  - key:             readability-identifier-length.MinimumParameterNameLength
+    value:           '1'
+  - key:             readability-identifier-length.MinimumLoopCounterNameLength
+    value:           '1'
+  - key:             readability-braces-around-statements.ShortStatementLines
+    value:           '2'
+    # ignore Eigen, yaml-cpp, until added to IWYU and also ignore internal GCC headers (bits/)
+  - key:             misc-include-cleaner.IgnoreHeaders
+    value:           'Eigen/src/.*|yaml-cpp/.*|bits/.*|external/.*|srv/.*|msg/.*'
+    # This is google style guide check options
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ClassMemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ConstexprVariableCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ConstexprVariablePrefix
+    value:           k
+  - key:             readability-identifier-naming.EnumCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.EnumConstantCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.EnumConstantPrefix
+    value:           k
+  - key:             readability-identifier-naming.FunctionCase
+    value:           camelBack
+  - key:             readability-identifier-naming.GlobalConstantCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.GlobalConstantPrefix
+    value:           k
+  - key:             readability-identifier-naming.StaticConstantCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.StaticConstantPrefix
+    value:           k
+  - key:             readability-identifier-naming.StaticVariableCase
+    value:           lower_case
+  - key:             readability-identifier-naming.MacroDefinitionCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.MacroDefinitionIgnoredRegexp
+    value:           '^[A-Z]+(_[A-Z]+)*_$'
+  - key:             readability-identifier-naming.PrivateMemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ProtectedMemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.PublicMemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.PrivateMemberSuffix
+    value:           _
+  - key:             readability-identifier-naming.ProtectedMemberSuffix
+    value:           _
+  - key:             readability-identifier-naming.PublicMemberSuffix
+    value:           ''
+  - key:             readability-identifier-naming.NamespaceCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ParameterCase
+    value:           lower_case
+  - key:             readability-identifier-naming.TypeAliasCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.TypedefCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.VariableCase
+    value:           lower_case
+  - key:             readability-identifier-naming.IgnoreMainLikeFunctions
+    value:           1
+ExtraArgs:
+  - '-I/usr/include/c++/11'
+  - '-I/usr/include/x86_64-linux-gnu/c++/11'
+  - '-std=c++17'
+...
