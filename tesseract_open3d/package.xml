@@ -14,8 +14,6 @@
   <build_depend>eigen</build_depend>
   <build_export_depend>eigen</build_export_depend>
 
-  <depend>yaml-cpp</depend>
-  <depend>tesseract_common</depend>
   <depend>libopen3d-dev</depend>
 
   <test_depend>gtest</test_depend>

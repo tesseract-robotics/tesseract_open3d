@@ -1,0 +1,2 @@
+#!/bin/bash
+cd tesseract_open3d/docs && doxygen Doxyfile
