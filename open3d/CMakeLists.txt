@@ -34,5 +34,6 @@ ExternalProject_Add(
 # and the Config.cmake into <prefix>/lib and <prefix>/lib/cmake/Open3D.
 install(DIRECTORY "${OPEN3D_STAGE}/include/open3d" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} USE_SOURCE_PERMISSIONS)
 install(DIRECTORY "${OPEN3D_STAGE}/lib/" DESTINATION ${CMAKE_INSTALL_LIBDIR} USE_SOURCE_PERMISSIONS)
+install(DIRECTORY "${OPEN3D_STAGE}/share/" DESTINATION share/${PROJECT_NAME} USE_SOURCE_PERMISSIONS)
 
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
