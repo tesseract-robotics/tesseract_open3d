@@ -28,7 +28,12 @@ set(COVERAGE_EXCLUDE
     /*/gtest/*)
 add_code_coverage_all_targets(EXCLUDE ${COVERAGE_EXCLUDE} ENABLE ${TESSERACT_ENABLE_CODE_COVERAGE})
 
-add_library(${PROJECT_NAME} src/world.cpp src/sensors.cpp src/simulator.cpp)
+add_library(
+  ${PROJECT_NAME}
+  src/world.cpp
+  src/sensors.cpp
+  src/simulator.cpp
+  src/utils.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen Open3D::Open3D)
 target_compile_options(${PROJECT_NAME} PUBLIC ${TESSERACT_COMPILE_OPTIONS_PUBLIC})
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${TESSERACT_COMPILE_DEFINITIONS} ${TESSERACT_BACKTRACE_DEFINITION})
@@ -48,6 +53,7 @@ target_link_libraries(${PROJECT_NAME}_demo PRIVATE ${PROJECT_NAME} Eigen3::Eigen
 target_compile_options(${PROJECT_NAME}_demo PRIVATE ${TESSERACT_COMPILE_OPTIONS_PUBLIC})
 target_compile_definitions(${PROJECT_NAME}_demo PRIVATE ${TESSERACT_COMPILE_DEFINITIONS}
                                                         ${TESSERACT_BACKTRACE_DEFINITION})
+target_compile_definitions(${PROJECT_NAME}_demo PUBLIC OPEN3D_RESOURCES_DIR="${CMAKE_INSTALL_PREFIX}")
 target_clang_tidy(${PROJECT_NAME}_demo ENABLE ${TESSERACT_ENABLE_CLANG_TIDY})
 target_cxx_version(${PROJECT_NAME}_demo PRIVATE VERSION ${TESSERACT_CXX_VERSION})
 target_code_coverage(
