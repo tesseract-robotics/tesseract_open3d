@@ -1,7 +1,6 @@
 #include <tesseract_open3d/world.h>
 
 // STD
-#include <vector>
 #include <utility>
 #include <memory>
 
@@ -9,8 +8,7 @@
 #include <Eigen/Geometry>  // IWYU pragma: keep
 
 // Open3d
-#include <open3d/core/Dtype.h>
-#include <open3d/core/Tensor.h>
+#include <open3d/core/EigenConverter.h>
 #include <open3d/t/geometry/RaycastingScene.h>
 #include <open3d/t/geometry/TriangleMesh.h>
 
@@ -25,10 +23,7 @@ namespace
 TriangleMesh transformCopy(const TriangleMesh& m, const Eigen::Isometry3d& t)
 {
   TriangleMesh out = m;
-  const Eigen::Matrix4f tf = t.matrix().cast<float>();
-  // RaycastingScene expects t::geometry transforms as core::Tensor (4x4).
-  const open3d::core::Tensor t_core(std::vector<float>(tf.data(), tf.data() + 16), { 4, 4 }, open3d::core::Float32);
-  out.Transform(t_core);
+  out.Transform(open3d::core::eigen_converter::EigenMatrixToTensor(t.matrix()));
   return out;
 }
 
