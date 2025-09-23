@@ -4,8 +4,10 @@
 // STD
 #include <map>
 #include <memory>
+#include <cstdint>
 
 // Open3d
+#include <open3d/core/Device.h>
 #include <open3d/t/geometry/RaycastingScene.h>
 #include <open3d/t/geometry/TriangleMesh.h>
 
@@ -25,22 +27,18 @@ class World
 {
 public:
   /** @brief Constructs an empty world. */
-  World();
+  World(int64_t n_threads = 0, const open3d::core::Device& device = open3d::core::Device("CPU:0"));
 
   /**
-   * @brief Sets/replaces the static environment mesh (in world frame).
-   * @param mesh Tensor mesh to copy into the world.
-   */
-  void setStaticMesh(const open3d::t::geometry::TriangleMesh& mesh);
-
-  /**
-   * @brief Registers a dynamic instance.
-   * @param base_mesh Mesh in the instance's local frame (shared_ptr kept).
+   * @brief Registers a static/dynamic instance.
+   * @param mesh Mesh in the instance's local frame (shared_ptr kept).
+   * @param pose The mesh pose in the world
    * @return Integer instance id to address this object later.
    *
    * @warning The mesh pointer is held; do not mutate concurrently.
    */
-  int registerInstance(std::shared_ptr<open3d::t::geometry::TriangleMesh> base_mesh);
+  int registerInstance(std::shared_ptr<open3d::t::geometry::TriangleMesh> mesh,
+                       const Eigen::Isometry3d& pose = Eigen::Isometry3d::Identity());
 
   /**
    * @brief Updates an instance's world pose to be used on the next CommitFrame().
@@ -57,6 +55,12 @@ public:
   void updateInstanceMesh(int instance_id, std::shared_ptr<open3d::t::geometry::TriangleMesh> base_mesh);
 
   /**
+   * @brief Remove instance
+   * @param instance_id The instance id to remove
+   */
+  void removeInstance(int instance_id);
+
+  /**
    * @brief Rebuilds the internal RaycastingScene for the current frame.
    *
    * Applies all current poses to dynamic instances, combines with the static mesh,
@@ -70,11 +74,16 @@ public:
 private:
   struct Instance
   {
+    Instance() = default;
+    Instance(std::shared_ptr<open3d::t::geometry::TriangleMesh> mesh, const Eigen::Isometry3d& origin);
+
     std::shared_ptr<open3d::t::geometry::TriangleMesh> base;  // untransformed
     Eigen::Isometry3d pose{ Eigen::Isometry3d::Identity() };
   };
 
-  open3d::t::geometry::TriangleMesh static_mesh_;
+  int64_t n_threads_{ 0 };
+  open3d::core::Device device_{ "CPU:0" };
+  std::vector<Instance> static_instances_;
   std::map<int, Instance> instances_;
   int next_instance_id_ = 1;
 

@@ -21,16 +21,16 @@
 // STD
 #include <map>
 #include <memory>
+#include <cstdint>
+
+// Open3D
+namespace open3d::core
+{
+class Device;
+}
 
 namespace tesseract_o3d
 {
-// /** @brief Time-stamped rigid pose (world <- sensor). */
-// struct TimedPose
-// {
-//     double t;                 /**< Seconds (absolute/sim time). */
-//     Eigen::Isometry3d pose;   /**< SE(3): world <- sensor. */
-// };
-
 /**
  * @brief Multi-sensor simulator orchestrating world rebuilds and captures.
  *
@@ -42,6 +42,8 @@ namespace tesseract_o3d
 class Simulator
 {
 public:
+  Simulator(int64_t n_threads = 0, const open3d::core::Device& device = open3d::core::Device("CPU:0"));
+
   /** @brief Access the world (mutable). */
   World& world();
 

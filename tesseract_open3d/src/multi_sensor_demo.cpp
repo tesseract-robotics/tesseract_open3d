@@ -3,6 +3,7 @@
 
 // STD
 #include <string>
+#include <memory>
 
 // Open3d
 #include <open3d/geometry/PointCloud.h>
@@ -63,11 +64,11 @@ int main()
   // Base at z=0, center at z=0.5:
   box_legacy->Translate(Eigen::Vector3d(-0.5, -0.5, 0.0));
   box_legacy->Translate(Eigen::Vector3d(0.0, 0.0, 0.5));
-  const TriangleMesh box = TriangleMesh::FromLegacy(*box_legacy);
+  const auto box = std::make_shared<TriangleMesh>(TriangleMesh::FromLegacy(*box_legacy));
 
   // --- Simulator/world -------------------------------------------------------
-  tesseract_o3d::Simulator sim;
-  sim.world().setStaticMesh(box);  // ONLY object in the scene
+  tesseract_o3d::Simulator sim(5);
+  sim.world().registerInstance(box);  // ONLY object in the scene
 
   // --- Add sensors (all +Z-forward) -----------------------------------------
   // Spinning LiDAR
