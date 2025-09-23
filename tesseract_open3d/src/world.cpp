@@ -3,12 +3,14 @@
 // STD
 #include <utility>
 #include <memory>
+#include <cstdint>
 
 // Eigen SDK
 #include <Eigen/Geometry>  // IWYU pragma: keep
 
 // Open3d
 #include <open3d/core/EigenConverter.h>
+#include <open3d/core/Device.h>
 #include <open3d/t/geometry/RaycastingScene.h>
 #include <open3d/t/geometry/TriangleMesh.h>
 
@@ -29,15 +31,22 @@ TriangleMesh transformCopy(const TriangleMesh& m, const Eigen::Isometry3d& t)
 
 }  // namespace
 
-World::World() : scene_(std::make_unique<RaycastingScene>()) {}
+// NOLINTNEXTLINE(modernize-pass-by-value)
+World::Instance::Instance(std::shared_ptr<open3d::t::geometry::TriangleMesh> mesh,
+                          const Eigen::Isometry3d& origin)  // NOLINT(modernize-pass-by-value)
+  : base(std::move(mesh)), pose(origin)
+{
+}
 
-void World::setStaticMesh(const TriangleMesh& mesh) { static_mesh_ = mesh; }
+World::World(int64_t n_threads, const open3d::core::Device& device)
+  : n_threads_(n_threads), device_(device), scene_(std::make_unique<RaycastingScene>(n_threads_, device_))
+{
+}
 
-int World::registerInstance(std::shared_ptr<TriangleMesh> base_mesh)
+int World::registerInstance(std::shared_ptr<TriangleMesh> mesh, const Eigen::Isometry3d& pose)
 {
   const int id = next_instance_id_++;
-  instances_[id].base = std::move(base_mesh);
-  instances_[id].pose = Eigen::Isometry3d::Identity();
+  instances_[id] = Instance{ std::move(mesh), pose };
   return id;
 }
 
@@ -55,25 +64,21 @@ void World::updateInstanceMesh(int instance_id, std::shared_ptr<TriangleMesh> ba
     it->second.base = std::move(base_mesh);
 }
 
+void World::removeInstance(int instance_id) { instances_.erase(instance_id); }
+
 void World::commitFrame()
 {
   // fresh BVH each frame
-  scene_ = std::make_unique<RaycastingScene>();
-
-  // Add the static environment (already in world frame).
-  if (!static_mesh_.IsEmpty())
-  {
-    (void)scene_->AddTriangles(static_mesh_);
-  }
+  scene_ = std::make_unique<RaycastingScene>(n_threads_, device_);
 
   // Add each dynamic instance after applying its world pose.
-  for (const auto& [id, inst] : instances_)
+  for (const auto& [id, instance] : instances_)
   {
-    if (!inst.base || inst.base->IsEmpty())
+    if (!instance.base || instance.base->IsEmpty())
       continue;
 
     // Transform a copy into world frame, then add.
-    const TriangleMesh m = transformCopy(*inst.base, inst.pose);
+    const TriangleMesh m = transformCopy(*instance.base, instance.pose);
     (void)scene_->AddTriangles(m);
   }
 }

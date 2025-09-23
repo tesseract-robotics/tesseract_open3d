@@ -5,9 +5,15 @@
 #include <memory>
 #include <utility>
 #include <map>
+#include <cstdint>
+
+// Open3D
+#include <open3d/core/Device.h>
 
 namespace tesseract_o3d
 {
+Simulator::Simulator(int64_t n_threads, const open3d::core::Device& device) : world_(n_threads, device) {}
+
 World& Simulator::world() { return world_; }
 
 const World& Simulator::world() const { return world_; }
