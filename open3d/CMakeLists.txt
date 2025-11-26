@@ -30,7 +30,6 @@ include(ExternalProject)
 
 set(BUILD_CUDA OFF)
 set(BUILD_PYTORCH_OPS OFF)
-set(WITH_EMBREE ON)
 
 ExternalProject_Add(
   ${PROJECT_NAME}
@@ -85,7 +84,7 @@ ExternalProject_Add(
     -DUSE_SYSTEM_TINYOBJLOADER=ON
     -DUSE_SYSTEM_VTK=ON
     -DUSE_SYSTEM_ZEROMQ=ON
-    -DWITH_EMBREE=${WITH_EMBREE}
+    -DWITH_EMBREE=ON
     -DWITH_MINIZIP=ON)
 
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
