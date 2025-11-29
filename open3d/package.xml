@@ -24,7 +24,6 @@
   <depend>libjsoncpp-dev</depend>
   <depend>liblapack-dev</depend>
   <depend>liblzf-dev</depend>
-  <depend>liblzf-dev</depend>
 
   <export>
     <build_type>cmake</build_type>
