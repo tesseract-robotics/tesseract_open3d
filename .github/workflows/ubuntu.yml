@@ -41,10 +41,7 @@ jobs:
         run: |
           apt update
           apt upgrade -y
-          apt install software-properties-common -y
-          add-apt-repository universe
-          apt update
-          apt install -y python3-pip liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev
+          apt install -y python3-pip libc++-dev libc++abi-dev liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev
           python3 -m pip install --upgrade cmake
 
       - name: Build and Tests
