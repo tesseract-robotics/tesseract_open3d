@@ -39,6 +39,7 @@ jobs:
       - name: Install Depends
         shell: bash
         run: |
+          add-apt-repository universe
           apt update
           apt upgrade -y
           apt install -y python3-pip liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev
