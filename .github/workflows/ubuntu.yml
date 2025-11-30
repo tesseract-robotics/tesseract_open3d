@@ -41,7 +41,7 @@ jobs:
         run: |
           apt update
           apt upgrade -y
-          apt install -y python3-pip libc++-dev libc++abi-dev liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev libxkbcommon-dev libxinerama-dev
+          apt install -y python3-pip libc++-dev libc++abi-dev liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev libxkbcommon-dev libxinerama-dev libxrandr-dev libxcursor-dev libxi-dev
           python3 -m pip install --upgrade cmake
 
       - name: Build and Tests
