@@ -45,6 +45,9 @@ jobs:
         run: |
           apt update
           apt upgrade -y
+          apt install software-properties-common -y
+          add-apt-repository universe
+          apt update
           apt install -y wget python3-pip liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev
           python3 -m pip install --upgrade cmake
           echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main" | tee /etc/apt/sources.list.d/llvm-toolchain.list
