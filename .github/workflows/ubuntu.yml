@@ -41,7 +41,8 @@ jobs:
         run: |
           apt update
           apt upgrade -y
-          apt install -y liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev
+          apt install -y python3-pip liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev
+          python3 -m pip install --upgrade cmake
 
       - name: Build and Tests
         uses: tesseract-robotics/colcon-action@v11
