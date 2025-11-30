@@ -45,7 +45,7 @@ jobs:
         run: |
           apt update
           apt upgrade -y
-          apt install -y wget python3-pip libc++-dev libc++abi-dev liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev
+          apt install -y wget python3-pip libc++-dev libc++abi-dev liboctomap-dev libfilament-dev libfilament-tools libflann-dev libimgui-dev libminizip-dev libxkbcommon-dev
           python3 -m pip install --upgrade cmake
           echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main" | tee /etc/apt/sources.list.d/llvm-toolchain.list
           echo "deb-src http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main" | tee -a /etc/apt/sources.list.d/llvm-toolchain.list
