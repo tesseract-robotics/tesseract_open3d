@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15.0)
 
 # Extract package name and version
-project(Open3D VERSION 0.19.0 LANGUAGES CXX)
+project(Open3D VERSION 0.19.0 LANGUAGES CXX C)
 
 if(WIN32)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -10,30 +10,82 @@ endif()
 include(GNUInstallDirs)
 include(ExternalProject)
 
-set(OPEN3D_URL
-    "https://github.com/isl-org/Open3D/releases/download/v0.19.0/open3d-devel-linux-x86_64-cxx11-abi-0.19.0.tar.xz"
-    CACHE STRING "Path or URL to Open3D prebuilt C++ archive (.tar.xz)")
-set(OPEN3D_URL_HASH "" CACHE STRING "Optional SHA256 of the archive (SHA256=<hash>)")
+# set(OPEN3D_URL
+# "https://github.com/isl-org/Open3D/releases/download/v0.19.0/open3d-devel-linux-x86_64-cxx11-abi-0.19.0.tar.xz" CACHE
+# STRING "Path or URL to Open3D prebuilt C++ archive (.tar.xz)") set(OPEN3D_URL_HASH "" CACHE STRING "Optional SHA256 of
+# the archive (SHA256=<hash>)")
 
-# Extract into the build tree; we'll install from there.
-set(OPEN3D_STAGE "${CMAKE_BINARY_DIR}/open3d_stage")
+# # Extract into the build tree; we'll install from there. set(OPEN3D_STAGE "${CMAKE_BINARY_DIR}/open3d_stage")
+
+# ExternalProject_Add( ${PROJECT_NAME} URL "${OPEN3D_URL}" URL_HASH "${OPEN3D_URL_HASH}" DOWNLOAD_DIR
+# "${CMAKE_BINARY_DIR}/_downloads" SOURCE_DIR "${OPEN3D_STAGE}" CONFIGURE_COMMAND "" BUILD_COMMAND "" INSTALL_COMMAND ""
+# TLS_VERIFY ON)
+
+# # ---- Install headers, libs, and the Open3D CMake package ------------------- # The prebuilt archive layout is:
+# include/, lib/libOpen3D.so, lib/cmake/Open3D/... Installing lib/ copies both the .so # and the Config.cmake into
+# <prefix>/lib and <prefix>/lib/cmake/Open3D. install(DIRECTORY "${OPEN3D_STAGE}/include/open3d" DESTINATION
+# ${CMAKE_INSTALL_INCLUDEDIR} USE_SOURCE_PERMISSIONS) install(DIRECTORY "${OPEN3D_STAGE}/lib/" DESTINATION
+# ${CMAKE_INSTALL_LIBDIR} USE_SOURCE_PERMISSIONS) install(DIRECTORY "${OPEN3D_STAGE}/share/" DESTINATION
+# share/${PROJECT_NAME} USE_SOURCE_PERMISSIONS)
+
+set(BUILD_CUDA OFF)
+set(BUILD_PYTORCH_OPS OFF)
 
 ExternalProject_Add(
   ${PROJECT_NAME}
-  URL "${OPEN3D_URL}"
-  URL_HASH "${OPEN3D_URL_HASH}"
-  DOWNLOAD_DIR "${CMAKE_BINARY_DIR}/_downloads"
-  SOURCE_DIR "${OPEN3D_STAGE}"
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND ""
-  INSTALL_COMMAND ""
-  TLS_VERIFY ON)
-
-# ---- Install headers, libs, and the Open3D CMake package -------------------
-# The prebuilt archive layout is: include/, lib/libOpen3D.so, lib/cmake/Open3D/... Installing lib/ copies both the .so
-# and the Config.cmake into <prefix>/lib and <prefix>/lib/cmake/Open3D.
-install(DIRECTORY "${OPEN3D_STAGE}/include/open3d" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} USE_SOURCE_PERMISSIONS)
-install(DIRECTORY "${OPEN3D_STAGE}/lib/" DESTINATION ${CMAKE_INSTALL_LIBDIR} USE_SOURCE_PERMISSIONS)
-install(DIRECTORY "${OPEN3D_STAGE}/share/" DESTINATION share/${PROJECT_NAME} USE_SOURCE_PERMISSIONS)
+  GIT_REPOSITORY https://github.com/isl-org/Open3D.git
+  GIT_TAG v0.19.0
+  SOURCE_DIR ${CMAKE_BINARY_DIR}/../open3d-src
+  BINARY_DIR ${CMAKE_BINARY_DIR}/../open3d-build
+  UPDATE_DISCONNECTED ${UPDATE_DISCONNECTED}
+  CMAKE_CACHE_ARGS
+    -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    -DCMAKE_BUILD_TYPE:STRING=Release
+    -DCMAKE_SKIP_RPATH=ON
+    -DDEVELOPER_BUILD=OFF
+    -DGLIBCXX_USE_CXX11_ABI=1
+    -DBUILD_SHARED_LIBS=ON
+    -DBUILD_EXAMPLES=OFF
+    -DBUILD_CUDA_MODULE=${BUILD_CUDA}
+    -DBUILD_COMMON_CUDA_ARCHS=${BUILD_CUDA}
+    -DCUDAToolkit_INCLUDE_DIR=/usr/include
+    -DBUILD_UNIT_TESTS=OFF
+    -DBUILD_ISPC_MODULE=OFF
+    -DBUILD_WEBRTC=OFF
+    -DBUILD_PYTORCH_OPS=${BUILD_PYTORCH_OPS}
+    -DUSE_BLAS=ON
+    -DWITH_IPP=OFF
+    -DUSE_SYSTEM_ASSIMP=ON
+    -DUSE_SYSTEM_BLAS=ON
+    -DUSE_SYSTEM_CURL=ON
+    -DUSE_SYSTEM_CUTLASS=ON
+    -DUSE_SYSTEM_EIGEN3=ON
+    -DUSE_SYSTEM_EMBREE=ON
+    -DUSE_SYSTEM_FAISS=ON
+    -DUSE_SYSTEM_FILAMENT=ON
+    -DUSE_SYSTEM_FLANN=ON
+    -DUSE_SYSTEM_FMT=ON
+    -DUSE_SYSTEM_GLEW=ON
+    -DUSE_SYSTEM_GLFW=ON
+    -DUSE_SYSTEM_GOOGLETEST=ON
+    -DUSE_SYSTEM_IMGUI=ON
+    -DUSE_SYSTEM_JPEG=ON
+    -DUSE_SYSTEM_JSONCPP=ON
+    -DUSE_SYSTEM_LIBLZF=ON
+    -DUSE_SYSTEM_MSGPACK=ON
+    -DUSE_SYSTEM_NANOFLANN=ON
+    -DUSE_SYSTEM_OPENSSL=ON
+    -DUSE_SYSTEM_PNG=ON
+    -DUSE_SYSTEM_PYBIND11=ON
+    -DUSE_SYSTEM_QHULLCPP=ON
+    -DUSE_SYSTEM_STDGPU=ON
+    -DUSE_SYSTEM_TBB=ON
+    -DUSE_SYSTEM_TINYGLTF=ON
+    -DUSE_SYSTEM_TINYOBJLOADER=ON
+    -DUSE_SYSTEM_VTK=ON
+    -DUSE_SYSTEM_ZEROMQ=ON
+    -DWITH_EMBREE=ON
+    -DWITH_MINIZIP=ON)
 
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
