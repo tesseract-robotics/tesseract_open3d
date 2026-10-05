@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - 'tesseract**'
+      - 'open3d/CMakeLists.txt'
       - '.github/workflows/code_quality.yml'
       - '.clang-tidy'
   schedule:
