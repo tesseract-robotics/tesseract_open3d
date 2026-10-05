@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - 'tesseract**'
+      - 'open3d/CMakeLists.txt'
       - '.github/workflows/clang_format.yml'
       - '**clang-format'
   schedule:
